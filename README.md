@@ -297,99 +297,99 @@ $$
 - After integration by parts of the spatial terms the associated variational form is. The boundary condition is cancelled:
 
 $$
-    \int^L_0 W \cdot \frac{U^{n+1} - U^n}{\Delta t} dx = \int^L_0 W_x \cdot F^n dx - \frac{\Delta t}{2} \int^L_0 W_x \cdot (A^n)^2 U_x^n dx - \cancel{\left[W \cdot \left( F^n + \frac{\Delta t}{2} F_t^n\right) \right]^{x=L}_{x=0}}
+\int^L_0 W \cdot \frac{U^{n+1} - U^n}{\Delta t} dx = \int^L_0 W_x \cdot F^n dx - \frac{\Delta t}{2} \int^L_0 W_x \cdot (A^n)^2 U_x^n dx - \cancel{\left[W \cdot \left( F^n + \frac{\Delta t}{2} F_t^n\right) \right]^{x=L}_{x=0}}
 $$
 
 $$
-     \int^L_0 W \cdot \frac{U^{n+1} - U^n}{\Delta t} dx = \int^L_0 W_x \cdot F^n dx - \frac{\Delta t}{2} \int^L_0 W_x \cdot (A^n)^2 U_x^n dx
+\int^L_0 W \cdot \frac{U^{n+1} - U^n}{\Delta t} dx = \int^L_0 W_x \cdot F^n dx - \frac{\Delta t}{2} \int^L_0 W_x \cdot (A^n)^2 U_x^n dx
 $$
 
 - Again discretizing over the internal nodes with the following: 
 
 $$
-    W = \sum N_A (x)
+W = \sum N_A (x)
 $$
 
 $$
-    U_A = \sum N_B (x) U(t)
+U_A = \sum N_B (x) U(t)
 $$
 
 - This leads to:
 
 $$
-    \int_0^L \sum N_A N_B \cdot \frac{dU}{dt} dx = \int_0^L \sum \frac{\partial N_A}{\partial x} \cdot F^n dx - \frac{\Delta t}{2} \int_0^L \sum \frac{\partial N_A}{\partial x} \cdot (A^n)^2 \frac{\partial N_B}{\partial x} U^n dx
+\int_0^L \sum N_A N_B \cdot \frac{dU}{dt} dx = \int_0^L \sum \frac{\partial N_A}{\partial x} \cdot F^n dx - \frac{\Delta t}{2} \int_0^L \sum \frac{\partial N_A}{\partial x} \cdot (A^n)^2 \frac{\partial N_B}{\partial x} U^n dx
 $$
 
 - Where:
 
 $$
-    M = \int_0^L \sum N_A N_B dx
+M = \int_0^L \sum N_A N_B dx
 $$
 
 $$
-    F = \int_0^L \sum \frac{\partial N_A}{\partial x} \cdot F^n dx
+F = \int_0^L \sum \frac{\partial N_A}{\partial x} \cdot F^n dx
 $$
 
 $$
-    K = - \frac{\Delta t}{2} \int_0^L \sum \frac{\partial N_A}{\partial x} \cdot (A^n)^2 \frac{\partial N_B}{\partial x} dx
+K = - \frac{\Delta t}{2} \int_0^L \sum \frac{\partial N_A}{\partial x} \cdot (A^n)^2 \frac{\partial N_B}{\partial x} dx
 $$
 
 - And the system of equations to be solved is:
 
 $$
-    M \frac{dU}{dt} = F + KU^n
+M \frac{dU}{dt} = F + KU^n
 $$
 
 $$
-    M \left(\frac{U^{n+1}- U^n}{\Delta t}\right) = F + KU^n
+M \left(\frac{U^{n+1}- U^n}{\Delta t}\right) = F + KU^n
 $$
 
 $$
-    M(U^{n+1}) = \Delta t (F + KU^n) + MU^n
+M(U^{n+1}) = \Delta t (F + KU^n) + MU^n
 $$
 
 - Similar to before, the flux term $F^n$ is calculated at the gaussian (integration) points and follows the same idea as the previous method:
 
 $$
-    \rho_{gp} = \sum N \rho_{el}
+\rho_{gp} = \sum N \rho_{el}
 $$
 
 $$
-    m_{gp} = \sum N m_{el}
+m_{gp} = \sum N m_{el}
 $$
 
 $$
-    \rho E_{gp} = \sum N \rho E_{el}
+\rho E_{gp} = \sum N \rho E_{el}
 $$
 
 $$
-    F_{gp} = \left [\begin{array}{cc}
-        m_{gp}\\
-        \frac{m_{gp}^2}{\rho_{gp}} + p_{gp} \\
-        \frac{m(\rho_{gp} E_{gp} + p_{gp})}{\rho_{gp}}
-    \end{array} \right ]
+F_{gp} = \left [\begin{array}{cc}
+m_{gp}\\
+\frac{m_{gp}^2}{\rho_{gp}} + p_{gp} \\
+\frac{m(\rho_{gp} E_{gp} + p_{gp})}{\rho_{gp}}
+\end{array} \right ]
 $$
 
 - With pressure is calculated as described in $(7)$, we use this in our Jacobian matrix $A$ to get:
 
 $$
-    A = \left [
-    \begin{array}{ccc}
-        0 & 1 & 0 \\
-        \frac{\gamma - 3}{2} \frac{m^2}{\rho^2} & (3 - \gamma) \frac{m}{\rho} & \gamma - 1 \\
-        -\gamma \frac{m \rho E}{\rho^2} + (\gamma - 1) \frac{m^3}{\rho^3} & \gamma \frac{\rho E}{\rho} - \frac{3}{2} (\gamma - 1) \frac{m^2}{\rho^2} & \gamma \frac{m}{\rho}
-    \end{array} \right ]
+A = \left [
+\begin{array}{ccc}
+0 & 1 & 0 \\
+\frac{\gamma - 3}{2} \frac{m^2}{\rho^2} & (3 - \gamma) \frac{m}{\rho} & \gamma - 1 \\
+-\gamma \frac{m \rho E}{\rho^2} + (\gamma - 1) \frac{m^3}{\rho^3} & \gamma \frac{\rho E}{\rho} - \frac{3}{2} (\gamma - 1) \frac{m^2}{\rho^2} & \gamma \frac{m}{\rho}
+\end{array} \right ]
 $$
 
 - At the gaussian point, squaring this for $(A^n)^2$ we get an expression for this as:
 
 $$
 (A_{gp})^2 = \left [
-    \begin{array}{ccc}
-        0 & 1 & 0 \\
-        \left(\frac{\gamma - 3}{2} \frac{m_{gp}^2}{\rho_{gp} ^2}\right)^2 & \left((3 - \gamma) \frac{m_gp}{\rho_{gp}}\right)^2 & \left(\gamma - 1\right)^2 \\
-        \left(-\gamma \frac{m_{gp} \rho E_{gp}}{\rho_{gp}^2} + (\gamma - 1) \frac{m_{gp}^3}{\rho_{gp}^3} \right)^2 & \left(\gamma \frac{\rho E_{gp}}{\rho_{gp}} - \frac{3}{2} (\gamma - 1) \frac{m_{gp}^2}{\rho_{gp}^2} \right)^2 & \left( \gamma \frac{m_{gp}}{\rho_{gp}} \right)^2
-    \end{array} \right ]
+\begin{array}{ccc}
+0 & 1 & 0 \\
+\left(\frac{\gamma - 3}{2} \frac{m_{gp}^2}{\rho_{gp} ^2}\right)^2 & \left((3 - \gamma) \frac{m_gp}{\rho_{gp}}\right)^2 & \left(\gamma - 1\right)^2 \\
+\left(-\gamma \frac{m_{gp} \rho E_{gp}}{\rho_{gp}^2} + (\gamma - 1) \frac{m_{gp}^3}{\rho_{gp}^3} \right)^2 & \left(\gamma \frac{\rho E_{gp}}{\rho_{gp}} - \frac{3}{2} (\gamma - 1) \frac{m_{gp}^2}{\rho_{gp}^2} \right)^2 & \left( \gamma \frac{m_{gp}}{\rho_{gp}} \right)^2
+\end{array} \right ]
 $$
 
 - Therefore, the idea is that the Jacobian matrix is re-calculated for each element for each timestep.
@@ -411,7 +411,7 @@ $$
 </div>
 <br>
 
-- As you can see in the above figures, the method seems to be working relatively good at a timestep before our target $ t = 0.2s $ but seems to be diverging after some time. This will be fixed when we look at the next numerical methods.
+- As you can see in the above figures, the method seems to be working relatively good at a timestep before our target $t = 0.2s$ but seems to be diverging after some time. This will be fixed when we look at the next numerical methods.
 
 ### 3. Taylor Galerkin (TG2) Two-Step
 - In this method we are solving the Euler Equations by means of a two-step time scheme:
@@ -427,39 +427,39 @@ $$
 - The weakened form in the second step is given by: 
 
 $$
- \int_{\Omega} W \cdot \frac{U^{n+1}-U^n}{\Delta t}\, dx = \int_{\Omega} \nabla W \cdot F^{n+1/2}\, dx - \cancel{\left[W \cdot F^{n+1/2}\right]_{x=0}^{x=L}}
+\int_{\Omega} W \cdot \frac{U^{n+1}-U^n}{\Delta t}\, dx = \int_{\Omega} \nabla W \cdot F^{n+1/2}\, dx - \cancel{\left[W \cdot F^{n+1/2}\right]_{x=0}^{x=L}}
 $$
 
 - Again discretizing over the internal nodes with the following: 
 
 $$
-    W = \sum N_A (x)
+W = \sum N_A (x)
 $$
 
 $$
-    U_A = \sum N_B (x) U(t)
+U_A = \sum N_B (x) U(t)
 $$
 
 - This leads to:
 
 $$
-    \int_0^L \sum N_A N_B \cdot \left(\frac{U^{n+1}-U^n}{\Delta t}\right) dx = \int_0^L \sum \frac{\partial N_A}{\partial x} \cdot F^{n+1/2} dx 
+\int_0^L \sum N_A N_B \cdot \left(\frac{U^{n+1}-U^n}{\Delta t}\right) dx = \int_0^L \sum \frac{\partial N_A}{\partial x} \cdot F^{n+1/2} dx 
 $$
 
 - Where:
 
 $$
-    M = \int_0^L \sum N_A N_B dx
+M = \int_0^L \sum N_A N_B dx
 $$
 
 $$
-    F = \int_0^L \sum \frac{\partial N_A}{\partial x} \cdot F^{n+1/2} dx
+F = \int_0^L \sum \frac{\partial N_A}{\partial x} \cdot F^{n+1/2} dx
 $$
 
 - And the system of equations to be solved is:
 
 $$
-    M U^{n+1} = \Delta t F + M U^n
+M U^{n+1} = \Delta t F + M U^n
 $$
 
 - Which brings us to the main core challenge of this numerical method which is to calculate $F^{n+1/2}$. 
@@ -486,28 +486,28 @@ $$
 Where: 
 
 $$
-    U^n = U _{gp} = \left [\begin{array}{cc}
-        rho_{gp}\\
-        m_{gp} \\
-        \rho E_{gp}
-    \end{array} \right ]
+U^n = U _{gp} = \left[\begin{array}{cc}
+    rho_{gp}\\
+    m_{gp} \\
+    \rho E_{gp}
+\end{array} \right]
 $$
 
 - And the Flux calculated using group representation instead of the classical representation used in the above two numerical method (basically calculating flux in element rather than gaussian points and then using shape functions to evaluate flux at gp):
 
 $$
-    F_{el} = \left [\begin{array}{cc}
-        m_{el}\\
-        \frac{m_{el}^2}{\rho_{el}} + p_{el} \\
-        \frac{m(\rho_{el} E_{el} + p_{el})}{\rho_{el}}
-    \end{array} \right ]
+F_{el} = \left[\begin{array}{cc}
+    m_{el}\\
+    \frac{m_{el}^2}{\rho_{el}} + p_{el} \\
+    \frac{m(\rho_{el} E_{el} + p_{el})}{\rho_{el}}
+\end{array} \right]
 $$
 
 $$
 \nabla \cdot F(U^n) = F_{gpx} = \sum Nx \cdot F_{el}
 $$
 
-- Therefore once we have the intermediate point $U^{n+1/2}$ the intermediate flux F^{n+1/2} is then easily evaluated within the gaussian point loop.
+- Therefore once we have the intermediate point $U^{n+1/2}$ the intermediate flux F^{n+1/2} is then easily evaluated within the gaussian point loop
 
 $$
 F^{n+1/2} = F(U^{n+1/2})
