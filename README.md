@@ -9,7 +9,7 @@ This code has been part of my work at the Barcelona Supercomputing Centre (BSC) 
 - **Solver Methods**: 
 - **Basis Functions**: Uses 1D Lagrange basis functions for spatial discretization.
 - **Gaussian Quadrature**: Employs 2nd Order Gaussian Quadrature for numerical integration.
-- **User Interaction**: Allows user input for 
+- **User Interaction**: Allows user input for end of simulation timestep and numerical scheme choice.
 
 ## Requirements
 - Python 3.x
