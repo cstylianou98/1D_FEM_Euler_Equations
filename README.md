@@ -199,7 +199,7 @@ $$
 - Integrate by parts to reduce the derivative on $F(U)_x$:
 
 $$
- \int_{0}^{L} w U_t \, dx + \cancel{\left [w AU\right]_{x=0}^{x=L}} - \int_{0}^{L} w_x F(U) \, dx = 0
+ \int_{0}^{L} w U_t \, dx + - \int_{0}^{L} w_x F(U) \, dx = 0
 $$
 
 - Discretizing over the internal nodes:
