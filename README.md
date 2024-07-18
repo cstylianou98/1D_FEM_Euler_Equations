@@ -177,10 +177,11 @@ $$
 Where $\gamma = \frac{C_p}{C_v} = 1.4$ 
 
 The initial conditions are taken as those of a Sod Shock Tube:
+
 $$
 (\rho, v, p)_{t=0}=\begin{cases}
-(1.0, 0, 1.0) & \text{if} 0 < x \leq 0.5 \\
-(0.125, 0.0, 0.1) & \text{if} 0.5 < x < 1
+(1.0, 0, 1.0) & \text{if } 0 < x \leq 0.5 \\
+(0.125, 0.0, 0.1) & \text{if } 0.5 < x < 1
 \end{cases}
 $$
 
@@ -256,16 +257,13 @@ $$
 
 - Solving with 100 elements and a timestep $dt = 1.5 * 10^{-3}$, the snapshot at time $t=0.2s$ of $\rho$, $v$, $p$ and $\rho E$ with the classic RK4 with Standard Galerkin is plotted below:
 
-
-
-(note $\textit{blue crosses}$ is our numerical solution and $\textit{orange line}$ is the analytic solution)
 <div>
-    <img src="sod_tube_RK4_standard_galerkin/RK4_standard_galerkin_t_end=0.2.png" alt="Graph of rho, v, p and rho_E for RK4 with Standard Galerkin" style="display: block; margin: 0 auto; width: 60%;">
+<img src="sod_tube_RK4_standard_galerkin/RK4_standard_galerkin_t_end=0.2.png" alt="Graph of rho, v, p and rho_E for RK4 with Standard Galerkin" style="display: block; margin: 0 auto; width: 60%;">
 </div>
 
-
 <br>
-- As you can see a reasonable amount of oscillations can be seen, something that will be looked into further in the next methods.
+
+- $\textit{Blue crosses}$ is our numerical solution and $\textit{orange line}$ is the analytic solution. As you can see a reasonable amount of oscillations can be seen, something that will be looked into further in the next methods.
 
 ### 2. Taylor Galerkin (TG2) One-Step
 - Time integration is performed by means of a one-step second order scheme:
@@ -484,11 +482,11 @@ U^{n+1/2} = U^n - 1/2 \Delta t \nabla \cdot F(U^n)
 $$
 
 
-Where: 
+- Where: 
 
 $$
 U^n = U_{gp} = \left[\begin{array}{cc}
-rho_{gp}\\
+\rho_{gp}\\
 m_{gp} \\
 \rho E_{gp}
 \end{array} \right]
@@ -527,7 +525,7 @@ $$
 - As can be seen a more accurate representation is achieved using the Taylor Galerkin (TG2) two step method. This can be further optimized by combining numerical scheme 1 (RK4) with TG2 two step. This will be shown in the next section.
 
 ### 4. Runge Kutta 4 with Taylor Galerkin (TG2) Two-Step
-In this numerical scheme we follow a combination of numerical schemes described in point 1. and 3. and we basically solve the system of equations as describe by RK4 method, but instead of solving using the standard flux matrix built using standard Galerkin method, we will use the intermediate flux described in TG2 Two step. For each sub-timestep of RK4 we apply the TG2 Two-Step and thus manage to benefit both from the higher accurasy of RK4 whilst around shocks we benefit from TG2 Two step's ability to better capture shock behaviour. The following graph results after solving with 100 elements and a timestep $\Delta t = 0.2s$:
+- In this numerical scheme we follow a combination of numerical schemes described in point 1. and 3. and we basically solve the system of equations as describe by RK4 method, but instead of solving using the standard flux matrix built using standard Galerkin method, we will use the intermediate flux described in TG2 Two step. For each sub-timestep of RK4 we apply the TG2 Two-Step and thus manage to benefit both from the higher accurasy of RK4 whilst around shocks we benefit from TG2 Two step's ability to better capture shock behaviour. The following graph results after solving with 100 elements and a timestep $\Delta t = 0.2s$:
 
 <br>
 <div>
@@ -535,4 +533,4 @@ In this numerical scheme we follow a combination of numerical schemes described 
 </div>
 <br>
 
-As seen, a better shock capturing ability is achieved.
+- As seen, a better shock capturing ability is achieved.
