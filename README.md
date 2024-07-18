@@ -525,7 +525,7 @@ $$
 - As can be seen a more accurate representation is achieved using the Taylor Galerkin (TG2) two step method. This can be further optimized by combining numerical scheme 1 (RK4) with TG2 two step. This will be shown in the next section.
 
 ### 4. Runge Kutta 4 with Taylor Galerkin (TG2) Two-Step
-- In this numerical scheme we follow a combination of numerical schemes described in point 1. and 3. and we basically solve the system of equations as describe by RK4 method, but instead of solving using the standard flux matrix built using standard Galerkin method, we will use the intermediate flux described in TG2 Two step. For each sub-timestep of RK4 we apply the TG2 Two-Step and thus manage to benefit both from the higher accurasy of RK4 whilst around shocks we benefit from TG2 Two step's ability to better capture shock behaviour. The following graph results after solving with 100 elements and a timestep $\Delta t = 0.2s$:
+- In this numerical scheme we follow a combination of numerical schemes described in point 1. and 3. and we basically solve the system of equations as describe by RK4 method, but instead of solving using the standard flux matrix built using standard Galerkin method, we will use the intermediate flux described in TG2 Two step. For each sub-timestep of RK4 we apply the TG2 Two-Step and thus manage to benefit both from the higher accuracy of RK4 whilst around shocks we benefit from TG2 Two step's ability to better capture shock behaviour. The following graph results after solving with 100 elements and a timestep $\Delta t = 0.2s$:
 
 <br>
 <div>
