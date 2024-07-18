@@ -131,7 +131,7 @@ For the purposes of these calculations, the definitions of $\tau_{ij}$ will not 
 As discussed briefly, the Euler equations are the inviscid equations of compressible flow. They are a particular case of the Navier-Stokes $(1)$. Therefore we can take the three-dimensional Euler equations as:
 
 $$
-    \frac{\partial \phi}{\partial t} + A_i(\phi) \frac{\partial \phi}{\partial x_i} = 0, \tag{5}
+\frac{\partial \phi}{\partial t} + A_i(\phi) \frac{\partial \phi}{\partial x_i} = 0, \tag{5}
 $$
 
 where $i = 1, ...., 3$ labels the space dimension and $\mathbf{\phi}$ is the vector of the unknowns in $(2)$. 
@@ -142,7 +142,7 @@ where $i = 1, ...., 3$ labels the space dimension and $\mathbf{\phi}$ is the vec
 The 1D formulation of $(5)$ which is also the focus of this code, can also be written as:
 
 $$
-    U_t + F(U)_x = 0, \tag{6}
+U_t + F(U)_x = 0, \tag{6}
 $$
 
 
@@ -150,10 +150,9 @@ Where:
 
 $$
 U = \left [\begin{array}{cc}
-
-      \rho \\
-      m \\
-      \rho E
+\rho \\
+m \\
+\rho E
 \end{array} \right ]
 $$
 
@@ -161,9 +160,9 @@ And:
 
 $$
 F(U) = \left [\begin{array}{cc}
-    m\\
-    \frac{m^2}{\rho} + p \\
-    \frac{m(\rho E + p)}{\rho}
+m\\
+\frac{m^2}{\rho} + p \\
+\frac{m(\rho E + p)}{\rho}
 \end{array} \right ]
 $$
 
@@ -179,10 +178,10 @@ Where $\gamma = \frac{C_p}{C_v} = 1.4$
 
 The initial conditions are taken as those of a $\textit{Sod Shock Tube}$:
 $$
-    (\rho, v, p)_{t=0} = \begin{cases}
-        \left(1.0, 0, 1.0\right)& \text{if } 0 < x \leq 0.5 \\
-        \left(0.125, 0.0, 0.1\right) & \text{if } 0.5 < x < 1
-    \end{cases}
+(\rho, v, p)_{t=0} = \begin{cases}
+\left(1.0, 0, 1.0\right)& \text{if } 0 < x \leq 0.5 \\
+\left(0.125, 0.0, 0.1\right) & \text{if } 0.5 < x < 1
+\end{cases}
 $$
 
 And Dirichlet Boundary conditions (i.e., the conserved quantities take on the values specified by the initial conditions at either boundary). 
@@ -192,13 +191,13 @@ And Dirichlet Boundary conditions (i.e., the conserved quantities take on the va
 - Start by weakening the form and integrating over the domain:
 
 $$
- \int_{\Omega} w U_t\, dx + \int_{\Omega} w F(U)_x\, dx = 0
+\int_{\Omega} w U_t\, dx + \int_{\Omega} w F(U)_x\, dx = 0
 $$
 
 - Integrate by parts to reduce the derivative on $F(U)_x$:
 
 $$
- \int_{0}^{L} w U_t \, dx + - \int_{0}^{L} w_x F(U) \, dx = 0
+\int_{0}^{L} w U_t \, dx + - \int_{0}^{L} w_x F(U) \, dx = 0
 $$
 
 - Discretizing over the internal nodes:
@@ -214,38 +213,38 @@ $$
 - This leads to:
 
 $$
- \int_{\Omega} \sum_{B=2}^{n_{eq+1}} N_A N_B \frac{dU_A}{dt}\, dx -  \int_{\Omega} \sum_{B=2}^{n_{eq+1}} \frac{\partial N_A}{\partial x} F_{gp}\, dx = 0  
+\int_{\Omega} \sum_{B=2}^{n_{eq+1}} N_A N_B \frac{dU_A}{dt}\, dx -  \int_{\Omega} \sum_{B=2}^{n_{eq+1}} \frac{\partial N_A}{\partial x} F_{gp}\, dx = 0  
 $$
 
 - With the matrices given as:
 
 $$
-    M = \int_{0}^L \sum N_A N_B\, dx 
+M = \int_{0}^L \sum N_A N_B\, dx 
 $$
 
 $$
-    F = \int_0^L \sum \frac{\partial N_A}{\partial x} F_{gp}\, dx 
+F = \int_0^L \sum \frac{\partial N_A}{\partial x} F_{gp}\, dx 
 $$
 
 -  To get $F_{gp}$ (The Flux at the gaussian, aka integration points) we need to extract the values of $U$ for each $\rho,  m, \rho E$ at the gaussian point, and then perform the necessary calculations as given for $F(U)$ using these values.
 $$
-    \rho_{gp} = \sum N \rho_{el}
+\rho_{gp} = \sum N \rho_{el}
 $$
 
 $$
-    m_{gp} = \sum N m_{el}
+m_{gp} = \sum N m_{el}
 $$
 
 $$
-    \rho E_{gp} = \sum N \rho E_{el}
+\rho E_{gp} = \sum N \rho E_{el}
 $$
 
 $$
-    F_{gp} = \left [\begin{array}{cc}
-        m_{gp}\\
-        \frac{m_{gp}^2}{\rho_{gp}} + p_{gp} \\
-        \frac{m(\rho_{gp} E_{gp} + p_{gp})}{\rho_{gp}}
-    \end{array} \right ]
+F_{gp} = \left [\begin{array}{cc}
+m_{gp}\\
+\frac{m_{gp}^2}{\rho_{gp}} + p_{gp} \\
+\frac{m(\rho_{gp} E_{gp} + p_{gp})}{\rho_{gp}}
+\end{array} \right ]
 $$
 
 - With this we can setup up our RK4 formulation similar to burgers to solve the system of equations:
@@ -271,27 +270,28 @@ $$
 - Time integration is performed by means of a one-step second order scheme:
 
 $$
-    \frac{U^{n+1} - U^n}{\Delta t} = U_t^n + \frac{\Delta t}{2} U_{tt}^n
+\frac{U^{n+1} - U^n}{\Delta t} = U_t^n + \frac{\Delta t}{2} U_{tt}^n
 $$
 
 - Where:
 
 $$
-    U_t = - F_x
+U_t = - F_x
 $$
 
 $$
-    U_{tt} = - F_{xt} = -F_{tx} = - (AU_t)_x = (AF_x)_x = (A^2 U_x)_x
+U_{tt} = - F_{xt} = -F_{tx} = - (AU_t)_x = (AF_x)_x = (A^2 U_x)_x
 $$
 
 - $A$ is taken as the Jacobian matrix $A = \frac{\partial F}{\partial U}$:
 
-$$  A = \left [
-    \begin{array}{ccc}
-        \frac{\partial m}{\partial \rho} & \frac{\partial m}{\partial m} & \frac{\partial m}{\partial \rho E} \\
-        \frac{\partial \left( \frac{m^2}{\rho} + p \right)}{\partial \rho} & \frac{\partial \left(\frac{m^2}{\rho} + p\right)}{\partial m} & \frac{\partial\left(\frac{m^2}{\rho} + p\right)}{\partial \rho E} \\
-        \frac{\partial \left(\frac{m\rho E + p}{\rho}\right)}{\partial \rho} & \frac{\partial \left(\frac{m\rho E + p}{\rho}\right)}{\partial m} & \frac{\partial\left(\frac{m\rho E + p}{\rho}\right)}{\partial \rho E}
-    \end{array} \right ]
+$$ 
+A = \left [
+\begin{array}{ccc}
+\frac{\partial m}{\partial \rho} & \frac{\partial m}{\partial m} & \frac{\partial m}{\partial \rho E} \\
+\frac{\partial \left( \frac{m^2}{\rho} + p \right)}{\partial \rho} & \frac{\partial \left(\frac{m^2}{\rho} + p\right)}{\partial m} & \frac{\partial\left(\frac{m^2}{\rho} + p\right)}{\partial \rho E} \\
+\frac{\partial \left(\frac{m\rho E + p}{\rho}\right)}{\partial \rho} & \frac{\partial \left(\frac{m\rho E + p}{\rho}\right)}{\partial m} & \frac{\partial\left(\frac{m\rho E + p}{\rho}\right)}{\partial \rho E}
+\end{array} \right ]
 $$
 
 - After integration by parts of the spatial terms the associated variational form is. The boundary condition is cancelled:
@@ -487,9 +487,9 @@ Where:
 
 $$
 U^n = U _{gp} = \left[\begin{array}{cc}
-    rho_{gp}\\
-    m_{gp} \\
-    \rho E_{gp}
+rho_{gp}\\
+m_{gp} \\
+\rho E_{gp}
 \end{array} \right]
 $$
 
@@ -497,9 +497,9 @@ $$
 
 $$
 F_{el} = \left[\begin{array}{cc}
-    m_{el}\\
-    \frac{m_{el}^2}{\rho_{el}} + p_{el} \\
-    \frac{m(\rho_{el} E_{el} + p_{el})}{\rho_{el}}
+m_{el}\\
+\frac{m_{el}^2}{\rho_{el}} + p_{el} \\
+\frac{m(\rho_{el} E_{el} + p_{el})}{\rho_{el}}
 \end{array} \right]
 $$
 
