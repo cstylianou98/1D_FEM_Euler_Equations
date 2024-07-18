@@ -3,3 +3,5 @@
 
 # Ignore Python bytecode cache directories
 __pycache__/
+
+.gitignore
