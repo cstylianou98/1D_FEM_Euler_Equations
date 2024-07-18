@@ -57,13 +57,12 @@ $$
 for $i=1, ..., d$. As given by $(1)$ the set of unknowns given by $\phi$ is:
 
 $$
-    \phi = \left [\begin{array}{cc}
-    
-          U_1 \\
-          U_2 \\
-          U_3 \\
-          \rho E
-    \end{array} \right ] \tag{2}
+\phi = \left[ \begin{array}{c}
+      U_1 \\
+      U_2 \\
+      U_3 \\
+      \rho E
+\end{array} \right] \tag{2}
 $$
 
 where $\boldsymbol{U} = (U_1, U_2, U_3)$ is the momentum, $\rho$ is the density and $E$ is the total energy per unit volume, all of them being functions of space $\boldsymbol{x} = (x_1, x_2, x_3)$ and time $t$. The flux $\boldsymbol{F}$ for convection and diffusion in each dimension is given by:
@@ -203,9 +202,11 @@ $$
 $$
 
 - Discretizing over the internal nodes:
+
 $$
 w = \sum N_A (x)
-$$  
+$$
+
 $$
 U_A = \sum N_B (x) U(t)
 $$
@@ -221,6 +222,7 @@ $$
 $$
     M = \int_{0}^L \sum N_A N_B\, dx 
 $$
+
 $$
     F = \int_0^L \sum \frac{\partial N_A}{\partial x} F_{gp}\, dx 
 $$
@@ -229,12 +231,15 @@ $$
 $$
     \rho_{gp} = \sum N \rho_{el}
 $$
+
 $$
     m_{gp} = \sum N m_{el}
 $$
+
 $$
     \rho E_{gp} = \sum N \rho E_{el}
 $$
+
 $$
     F_{gp} = \left [\begin{array}{cc}
         m_{gp}\\
@@ -244,6 +249,7 @@ $$
 $$
 
 - With this we can setup up our RK4 formulation similar to burgers to solve the system of equations:
+
 $$
 M \frac{du}{dt} = F
 $$
@@ -263,19 +269,23 @@ $$
 
 ### 2. Taylor Galerkin (TG2) One-Step
 - Time integration is performed by means of a one-step second order scheme:
+
 $$
     \frac{U^{n+1} - U^n}{\Delta t} = U_t^n + \frac{\Delta t}{2} U_{tt}^n
 $$
 
 - Where:
+
 $$
     U_t = - F_x
 $$
+
 $$
     U_{tt} = - F_{xt} = -F_{tx} = - (AU_t)_x = (AF_x)_x = (A^2 U_x)_x
 $$
 
 - $A$ is taken as the Jacobian matrix $A = \frac{\partial F}{\partial U}$:
+
 $$  A = \left [
     \begin{array}{ccc}
         \frac{\partial m}{\partial \rho} & \frac{\partial m}{\partial m} & \frac{\partial m}{\partial \rho E} \\
@@ -285,58 +295,73 @@ $$  A = \left [
 $$
 
 - After integration by parts of the spatial terms the associated variational form is. The boundary condition is cancelled:
+
 $$
     \int^L_0 W \cdot \frac{U^{n+1} - U^n}{\Delta t} dx = \int^L_0 W_x \cdot F^n dx - \frac{\Delta t}{2} \int^L_0 W_x \cdot (A^n)^2 U_x^n dx - \cancel{\left[W \cdot \left( F^n + \frac{\Delta t}{2} F_t^n\right) \right]^{x=L}_{x=0}}
 $$
+
 $$
      \int^L_0 W \cdot \frac{U^{n+1} - U^n}{\Delta t} dx = \int^L_0 W_x \cdot F^n dx - \frac{\Delta t}{2} \int^L_0 W_x \cdot (A^n)^2 U_x^n dx
 $$
 
 - Again discretizing over the internal nodes with the following: 
+
 $$
     W = \sum N_A (x)
 $$
+
 $$
     U_A = \sum N_B (x) U(t)
 $$
 
 - This leads to:
+
 $$
     \int_0^L \sum N_A N_B \cdot \frac{dU}{dt} dx = \int_0^L \sum \frac{\partial N_A}{\partial x} \cdot F^n dx - \frac{\Delta t}{2} \int_0^L \sum \frac{\partial N_A}{\partial x} \cdot (A^n)^2 \frac{\partial N_B}{\partial x} U^n dx
 $$
 
 - Where:
+
 $$
     M = \int_0^L \sum N_A N_B dx
 $$
+
 $$
     F = \int_0^L \sum \frac{\partial N_A}{\partial x} \cdot F^n dx
 $$
+
 $$
     K = - \frac{\Delta t}{2} \int_0^L \sum \frac{\partial N_A}{\partial x} \cdot (A^n)^2 \frac{\partial N_B}{\partial x} dx
 $$
 
 - And the system of equations to be solved is:
+
 $$
     M \frac{dU}{dt} = F + KU^n
 $$
+
 $$
     M \left(\frac{U^{n+1}- U^n}{\Delta t}\right) = F + KU^n
 $$
+
 $$
     M(U^{n+1}) = \Delta t (F + KU^n) + MU^n
 $$
 
 - Similar to before, the flux term $F^n$ is calculated at the gaussian (integration) points and follows the same idea as the previous method:
+
 $$
     \rho_{gp} = \sum N \rho_{el}
 $$
+
 $$
     m_{gp} = \sum N m_{el}
 $$
+
 $$
     \rho E_{gp} = \sum N \rho E_{el}
 $$
+
 $$
     F_{gp} = \left [\begin{array}{cc}
         m_{gp}\\
@@ -394,37 +419,45 @@ $$
 $$
 U^{n+1/2} = U^n + \frac{\Delta t}{2}U_t^n = U^n - \frac{\Delta t}{2}\nabla \cdot F^n
 $$
+
 $$
 U^{n+1} = U^n + \Delta t U_t^{n+1/2} = U^n - \Delta t \nabla \cdot F^{n+1/2}
 $$
 
 - The weakened form in the second step is given by: 
+
 $$
  \int_{\Omega} W \cdot \frac{U^{n+1}-U^n}{\Delta t}\, dx = \int_{\Omega} \nabla W \cdot F^{n+1/2}\, dx - \cancel{\left[W \cdot F^{n+1/2}\right]_{x=0}^{x=L}}
 $$
 
 - Again discretizing over the internal nodes with the following: 
+
 $$
     W = \sum N_A (x)
 $$
+
 $$
     U_A = \sum N_B (x) U(t)
 $$
 
 - This leads to:
+
 $$
     \int_0^L \sum N_A N_B \cdot \left(\frac{U^{n+1}-U^n}{\Delta t}\right) dx = \int_0^L \sum \frac{\partial N_A}{\partial x} \cdot F^{n+1/2} dx 
 $$
 
 - Where:
+
 $$
     M = \int_0^L \sum N_A N_B dx
 $$
+
 $$
     F = \int_0^L \sum \frac{\partial N_A}{\partial x} \cdot F^{n+1/2} dx
 $$
 
 - And the system of equations to be solved is:
+
 $$
     M U^{n+1} = \Delta t F + M U^n
 $$
@@ -451,6 +484,7 @@ $$
 
 
 Where: 
+
 $$
     U^n = U _{gp} = \left [\begin{array}{cc}
         rho_{gp}\\
