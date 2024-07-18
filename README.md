@@ -176,11 +176,11 @@ $$
 
 Where $\gamma = \frac{C_p}{C_v} = 1.4$ 
 
-The initial conditions are taken as those of a $\textit{Sod Shock Tube}$:
+The initial conditions are taken as those of a Sod Shock Tube:
 $$
-(\rho, v, p)_{t=0} = \begin{cases}
-\left(1.0, 0, 1.0\right)& \text{if } 0 < x \leq 0.5 \\
-\left(0.125, 0.0, 0.1\right) & \text{if } 0.5 < x < 1
+(\rho, v, p)_{t=0}=\begin{cases}
+(1.0, 0, 1.0) & \text{if} 0 < x \leq 0.5 \\
+(0.125, 0.0, 0.1) & \text{if} 0.5 < x < 1
 \end{cases}
 $$
 
@@ -227,6 +227,7 @@ F = \int_0^L \sum \frac{\partial N_A}{\partial x} F_{gp}\, dx
 $$
 
 -  To get $F_{gp}$ (The Flux at the gaussian, aka integration points) we need to extract the values of $U$ for each $\rho,  m, \rho E$ at the gaussian point, and then perform the necessary calculations as given for $F(U)$ using these values.
+
 $$
 \rho_{gp} = \sum N \rho_{el}
 $$
@@ -476,7 +477,7 @@ $$
 
 - As a result the two-step Taylor Galerkin is implemented in two main steps:
 
-- $\textit{Step 1}$: Compute at the gaussian points of the elements the intermediate $U^{n+1/2}$ using:
+- STEP 1: Compute at the gaussian points of the elements the intermediate $U^{n+1/2}$ using:
 
 $$
 U^{n+1/2} = U^n - 1/2 \Delta t \nabla \cdot F(U^n)
@@ -486,7 +487,7 @@ $$
 Where: 
 
 $$
-U^n = U _{gp} = \left[\begin{array}{cc}
+U^n = U_{gp} = \left[\begin{array}{cc}
 rho_{gp}\\
 m_{gp} \\
 \rho E_{gp}
