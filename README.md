@@ -45,7 +45,7 @@ The program computes and plots the numerical solution of the Euler Equations giv
 
 # Background
 ## Compressible Flow
-In this section the finnite element numberical solution of the Euler in one dimension is presented. First we will look into the background and lay out the mathematics.
+In this section the finite element numberical solution of the Euler in one dimension is presented. First we will look into the background and lay out the mathematics.
 
 ## Navier Stokes equations
 Let $d$ be the space dimension (1, 2, 3). From the conservation of principles of momentum, mass and energy result the Navier-Stokes equations, which can be written as:

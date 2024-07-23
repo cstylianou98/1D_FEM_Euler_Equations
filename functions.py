@@ -257,11 +257,11 @@ def assemble_TG_one_step(U_current, numel, xnode, N_mef, Nxi_mef, wpg, gamma, dt
             A = compute_jacobian(rho_gp, m_gp, rho_E_gp, gamma)
             A_squared = A**2
 
-            K_rho[np.ix_(isp, isp)] += - 0.5 * dt * w_ig * (A_squared[0, 0] *(np.outer(Nx, Nx)) + 
+            K_rho[np.ix_(isp, isp)] +=  - 0.5 * dt * w_ig * (A_squared[0, 0] *(np.outer(Nx, Nx)) + 
                                         A_squared[1, 0] *(np.outer(Nx, Nx)) +  
                                         A_squared[2, 0] *(np.outer(Nx, Nx)))
             
-            K_m[np.ix_(isp, isp)] += - 0.5 * dt * w_ig * (A_squared[0, 1] * (np.outer(Nx, Nx)) + 
+            K_m[np.ix_(isp, isp)] +=  - 0.5 * dt * w_ig * (A_squared[0, 1] * (np.outer(Nx, Nx)) + 
                                       A_squared[1, 1] *(np.outer(Nx, Nx)) +  
                                       A_squared[2, 1] *(np.outer(Nx, Nx)))
             
