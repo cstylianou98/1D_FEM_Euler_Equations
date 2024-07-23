@@ -192,13 +192,13 @@ And Dirichlet Boundary conditions (i.e., the conserved quantities take on the va
 - Start by weakening the form and integrating over the domain:
 
 $$
-\int_{\Omega} w U_t\, dx + \int_{\Omega} w F(U)_x\, dx = 0
+\int_{\Omega} W U_t\, dx + \int_{\Omega} W F(U)_x\, dx = 0
 $$
 
 - Integrate by parts to reduce the derivative on $F(U)_x$:
 
 $$
-\int_{0}^{L} w U_t \, dx + - \int_{0}^{L} w_x F(U) \, dx = 0
+\int_{0}^{L} W U_t \, dx + - \int_{0}^{L} W_x F(U) \, dx = 0
 $$
 
 - Discretizing over the internal nodes:
