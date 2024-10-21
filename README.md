@@ -54,7 +54,7 @@ $$
 \frac{\partial \phi}{\partial t} + \frac{\partial F_i (\phi)}{\partial x_i} = 0 
 $$
 
-for $i=1, ..., d$. As given by $(1)$ the set of unknowns given by $\phi$ is:
+for $i=1, ..., d$. As given previously the set of unknowns given by $\phi$ is:
 
 $$
 \phi = \left[ \begin{array}{c}
@@ -62,7 +62,7 @@ $$
       U_2 \\
       U_3 \\
       \rho E
-\end{array} \right] \tag{2}
+\end{array} \right] 
 $$
 
 where $\boldsymbol{U} = (U_1, U_2, U_3)$ is the momentum, $\rho$ is the density and $E$ is the total energy per unit volume, all of them being functions of space $\boldsymbol{x} = (x_1, x_2, x_3)$ and time $t$. The flux $\boldsymbol{F}$ for convection and diffusion in each dimension is given by:
@@ -93,7 +93,7 @@ U_2 \\
 \frac{U_3 U_3}{\rho}+p \\
 U_3 \\
 \frac{U_3}{\rho} (E + p)
-\end{array} \right ], \tag{3}
+\end{array} \right ]
 $$
 
 $$
@@ -122,27 +122,27 @@ $$
 \tau_{33}\\
 0 \\
 \frac{U_k \tau_{k3}}{\rho} - q_3
-\end{array} \right ], \tag{4}
+\end{array} \right ]
 $$
 
 For the purposes of these calculations, the definitions of $\tau_{ij}$ will not be shown as we will be dealing with the Euler equations that effectively mean $\mu = 0$ disccused in the following section. 
 
 ## Euler Equations
-As discussed briefly, the Euler equations are the inviscid equations of compressible flow. They are a particular case of the Navier-Stokes $(1)$. Therefore we can take the three-dimensional Euler equations as:
+As discussed briefly, the Euler equations are the inviscid equations of compressible flow. They are a particular case of the Navier-Stokes given above. Therefore we can take the three-dimensional Euler equations as:
 
 $$
-\frac{\partial \phi}{\partial t} + A_i(\phi) \frac{\partial \phi}{\partial x_i} = 0, \tag{5}
+\frac{\partial \phi}{\partial t} + A_i(\phi) \frac{\partial \phi}{\partial x_i} = 0
 $$
 
-where $i = 1, ...., 3$ labels the space dimension and $\mathbf{\phi}$ is the vector of the unknowns in $(2)$. 
+where $i = 1, ...., 3$ labels the space dimension and $\mathbf{\phi}$ is the vector of the unknowns previously defined. 
 
 # Problem Statement
 
 ## 1D Formulation - Euler Equations
-The 1D formulation of $(5)$ which is also the focus of this code, can also be written as:
+The 1D formulation which is also the focus of this code, can also be written as:
 
 $$
-U_t + F(U)_x = 0, \tag{6}
+U_t + F(U)_x = 0
 $$
 
 
@@ -171,7 +171,7 @@ Taking note that: $\rho$ is density, $m = \rho v$ i.e momentum and $\rho E$ is t
 We take the assumption of a perfect gas in this problem there the pressure, $p$ is given by:
 
 $$
-p = (\gamma - 1) \left(\rho E - \frac{m^2}{2\rho}\right) \tag{7}
+p = (\gamma - 1) \left(\rho E - \frac{m^2}{2\rho}\right) 
 $$
 
 Where $\gamma = \frac{C_p}{C_v} = 1.4$ 
