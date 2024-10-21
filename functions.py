@@ -279,7 +279,7 @@ def assemble_TG_one_step(U_current, numel, xnode, N_mef, Nxi_mef, wpg, gamma, dt
             
     return M, F, K
 
-def assemble_TG_two_step(U_current, numel, xnode, N_mef, Nxi_mef, wpg, gamma, dt):
+def assemble_TG_two_step(U_current, numel, xnode, N_mef, Nxi_mef, wpg, gamma, dt, viscosity_e):
     '''
     (input) U_current tuple: current solution tuple
     (input) numel int: number of elements
@@ -304,7 +304,10 @@ def assemble_TG_two_step(U_current, numel, xnode, N_mef, Nxi_mef, wpg, gamma, dt
     F_rho_E = np.zeros(numnp)
     F = (F_rho, F_m, F_rho_E)
 
-
+    viscosity_term_rho = np.zeros((numnp, numnp))
+    viscosity_term_m = np.zeros((numnp, numnp))
+    viscosity_term_rho_E = np.zeros((numnp, numnp))
+    viscosity_term = (viscosity_term_rho, viscosity_term_m, viscosity_term_rho_E)
 
     for i in range(numel):
         h = xnode[i + 1] - xnode[i]
@@ -322,6 +325,8 @@ def assemble_TG_two_step(U_current, numel, xnode, N_mef, Nxi_mef, wpg, gamma, dt
         F_rho_el = m_el
         F_m_el = m_el**2/rho_el + p_el
         F_rho_E_el = (m_el * (rho_E_el + p_el)/ rho_el)
+
+        viscosity_e_el = viscosity_e[isp]
 
         for ig in range(ngaus):
             N = N_mef[ig, :]
@@ -346,6 +351,8 @@ def assemble_TG_two_step(U_current, numel, xnode, N_mef, Nxi_mef, wpg, gamma, dt
             F_m_inter = m_inter**2/ rho_inter + p_inter
             F_rho_E_inter = (m_inter * (rho_E_inter + p_inter)/ rho_inter)
 
+            viscosity_e_gp = np.dot(N, viscosity_e_el)
+
 
             M_rho[np.ix_(isp, isp)] += w_ig * np.outer(N, N)
             M_m[np.ix_(isp, isp)] += w_ig * np.outer(N, N)
@@ -355,6 +362,9 @@ def assemble_TG_two_step(U_current, numel, xnode, N_mef, Nxi_mef, wpg, gamma, dt
             F_m[isp] += w_ig * (Nx * F_m_inter)
             F_rho_E[isp] += w_ig * (Nx * F_rho_E_inter)
 
+            viscosity_term_rho[np.ix_(isp, isp)] += viscosity_e_gp * w_ig * np.outer(Nx, Nx)
+            viscosity_term_m[np.ix_(isp, isp)] += viscosity_e_gp * w_ig * np.outer(Nx, Nx)
+            viscosity_term_rho_E[np.ix_(isp, isp)] += viscosity_e_gp * w_ig * np.outer(Nx, Nx)
 
 
     M_rho[0,0] = 1
@@ -365,7 +375,62 @@ def assemble_TG_two_step(U_current, numel, xnode, N_mef, Nxi_mef, wpg, gamma, dt
     M_m[-1, -1] = 1
     M_rho_E[-1, -1] = 1  
 
-    return M, F
+    return M, F, viscosity_term
+
+def assemble_entropy_res(U_current, numel, xnode, N_mef, Nxi_mef, wpg, gamma):
+    '''
+    (input) U_current tuple: current solution tuple
+    (input) numel int: number of elements
+    (input) xnode arr: Array with x values stored
+    (input) N_mef arr: Array with the shape function 
+    (input) Nxi_mef arr: Array with shape function derivatives
+    (input) wpg arr: Array with weights 
+    (input) gamma float: Ratio of Cv/Cp (7/5 for ideal gas)
+
+    (output) M: Mass matrix tuple returned by function 
+    '''
+    numnp = numel + 1
+    entropy = np.zeros((numnp, numnp))
+    entropy_res = np.zeros((numnp, numnp))
+    viscosity_e = np.zeros((numnp, numnp))
+    
+    for i in range(numel):
+        h = xnode[i + 1] - xnode[i]
+        weight = wpg * h / 2
+        isp = [i, i + 1]  # Global number of the nodes of the current element
+
+        # Get value of each variable at current element  
+        rho_el =  U_current[0][isp]
+        m_el =  U_current[1][isp]
+        rho_E_el = U_current[2][isp] 
+
+        vel_el = U_current[1][isp]/U_current[0][isp]
+        p_el = calc_p(gamma, rho_E_el, m_el, rho_el)
+
+        ngaus = wpg.shape[0]
+
+        entropy_el = rho_el/(gamma-1) * np.log(p_el/rho_el**gamma)
+
+
+        entropy_flux = entropy_el * vel_el
+
+        for ig in range(ngaus):
+            N = N_mef[ig, :]
+            Nx = Nxi_mef[ig, :] * 2 / h
+            w_ig = weight[ig]
+
+            entropy_gp = np.dot(N, entropy_el) 
+            entropy_res_gp = np.dot(Nx, entropy_flux)
+
+            entropy_res[isp] += np.abs(w_ig * entropy_res_gp)
+            entropy[isp] +=  w_ig * entropy_gp 
+        
+    viscosity_e = (h**2 * entropy_res)/np.abs((np.max(entropy)-np.min(entropy)))
+    print(viscosity_e.shape)
+
+    return entropy_res, viscosity_e
+
+
 
 
 ## ANALYTIC CALCULATION FUNCTIONS
@@ -416,7 +481,7 @@ def SodShockAnalytic(config, t_end):
     x_fanleft = config['x0_analytical'] + int(np.ceil(c_fanleft*t_end/h))
     u4 = 2 / (config['gamma']+1) * (cL + (config['xnode'][x_fanleft:x_fanright]-config['xnode'][config['x0_analytical']])/t_end )
     v_analytic[0,x_fanleft:x_fanright] = config['U_init_analytical_left'][0]*(1 - (config['gamma']-1)/2.*u4/cL)**(2/(config['gamma']-1));
-    v_analytic[1,x_fanleft:x_fanright] = u4;
+    v_analytic[1,x_fanleft:x_fanright] = u4
     v_analytic[2,x_fanleft:x_fanright] = config['U_init_analytical_left'][2]*(1 - (config['gamma']-1)/2.*u4/cL)**(2*config['gamma']/(config['gamma']-1));
 
     # region L
@@ -430,6 +495,14 @@ def SodShockAnalytic(config, t_end):
 
 
 ## Plotting Functions
+def plot_entropy_res(variables_tuple, config):
+    plt.figure()
+    plt.xlabel('x')
+    plt.ylabel(r'$\nu_h$')
+    timestep = 0
+    plt.plot(config['xnode'], variables_tuple[5][:, config['nstep']])
+    plt.savefig(f"./{config['folder_path']}/{config['method_file_name']}_entropy_res_timestep={timestep}.png")
+
 def plot_solution(t_end, variables_tuple , config, analytic, rho_energy_analytic):
     fig, axs = plt.subplots(2,2,figsize=(8,8), layout='constrained')
     # First row
@@ -472,6 +545,7 @@ def plot_solution(t_end, variables_tuple , config, analytic, rho_energy_analytic
     axs[1, 1].set_ylim([-0.10, 3.05])
 
     plt.savefig(f"./{config['folder_path']}/{config['method_file_name']}_t_end={t_end}.png")
+    plt.close()
 
 def plot_animation(xnode, U, nstep, ylabel, variable_title, stabilization_graph_title, folder_path, file_name, t_end, dt):
     fig, ax = plt.subplots()

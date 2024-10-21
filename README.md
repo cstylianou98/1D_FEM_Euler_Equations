@@ -51,7 +51,7 @@ In this section the finite element numberical solution of the Euler in one dimen
 Let $d$ be the space dimension (1, 2, 3). From the conservation of principles of momentum, mass and energy result the Navier-Stokes equations, which can be written as:
 
 $$
-\frac{\partial \phi}{\partial t} + \frac{\partial F_i (\phi)}{\partial x_i} = 0 \tag{1}
+\frac{\partial \phi}{\partial t} + \frac{\partial F_i (\phi)}{\partial x_i} = 0 
 $$
 
 for $i=1, ..., d$. As given by $(1)$ the set of unknowns given by $\phi$ is:
